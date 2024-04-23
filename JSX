@@ -1,0 +1,124 @@
+import React, { useState } from 'react'
+import './passwordGenerator.css'
+
+const PasswordGenerator = () => {
+
+
+         const[lowerCase,setLowerCase]=useState(true);
+         const[upperCase,setUpperCase]=useState(true);
+         const[numbers,setNumbers]=useState(true);
+         const[symbols,setSymbols]=useState(false);
+         const[passLength,setPassLength]=useState(8);
+         const[newPass,setNewPass]=useState("");
+         const[successMsg,setSuccessMsg]=useState("");
+
+
+
+// console.log('symbol',symbols)
+// console.log('num',numbers)
+// console.log('lowcase',lowerCase)
+// console.log('uppercase',upperCase)
+const generatePass=()=>{
+    let currentPass='';
+    let charecters='';
+
+    if(symbols){
+        charecters +="~!@#$%^&*()_+=-}{[]\|':;?/><,.`";
+    }
+    if(numbers){
+        charecters +="0123456789";
+    }
+    if(lowerCase){
+        charecters +="abcdefghijklmnopqrstuvwxyz"
+    }
+    if(upperCase){
+        charecters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    }
+
+    console.log(charecters)
+
+    for(let i = 0; i<passLength; i++ )
+    {
+        currentPass += charecters.charAt( Math.floor(Math.random()*charecters.length) )
+    }
+
+    setNewPass(currentPass)
+
+
+
+}
+
+const copied =()=>{
+    const el = document.createElement('textarea');
+    el.value=newPass;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+    setSuccessMsg('Password Copied to! Clipboard');
+    setTimeout(() => {
+        setSuccessMsg('');
+        
+    }, 2000);
+
+}
+
+console.log(newPass)
+
+
+  return (
+    <>
+      <div className="container">
+        <h2>ErenXtech</h2>
+        <h4>Random Password Generator</h4>
+        <div className="passLength">
+            <label htmlFor="">Password Length :</label>
+            <input type="text" value={passLength}  onChange={(e)=>{setPassLength(e.target.value)}} />
+        </div>
+
+        <div className="filters">
+            <label htmlFor="symbols">Symbols</label>
+            <input type="checkbox" checked={symbols} onClick={()=>{ setSymbols(!symbols)   }}  name='symbols' />
+
+            <label htmlFor="numbers">Numbers</label>
+            <input type="checkbox" checked={numbers} onClick={()=>{ setNumbers(!numbers)   }} name='numbers' />
+
+            <label htmlFor="lowercase">LowerCase</label>
+            <input type="checkbox" checked={lowerCase} onClick={()=>{ setLowerCase(!lowerCase)   }} name='lowercase' />
+
+            <label htmlFor="uppercase">UpperCase</label>
+            <input type="checkbox" checked={upperCase} onClick={()=>{ setUpperCase(!upperCase)   }} name='uppercase' />
+
+
+        
+        </div>
+        <button className="generate-pass" onClick={generatePass}>Generate Password</button>
+        <div className="result">
+
+{
+
+    newPass.length>0?  <>
+                         <p>{newPass}</p> 
+                        <button className="copy" onClick={copied}>Copy</button>
+                       
+                        </>
+                     
+
+     :<p></p> 
+}
+         
+          
+
+
+        </div>
+
+       <p className='s'>{successMsg}</p>
+     
+
+      </div>
+      
+    </>
+  )
+}
+
+export default PasswordGenerator;
